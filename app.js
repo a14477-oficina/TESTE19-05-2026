@@ -96,10 +96,10 @@ app.get('/marcas/:cod', async (req, res) => {
 });
 
 // Rota para obter uma loja por id
-app.get('/lojas/:id', async (req, res) => {
+app.get('/lojas/:stamp', async (req, res) => {
     try {
         const sql = 'SELECT * FROM lojas WHERE stamp = ?';
-        const [rows] = await db.query(sql, [req.params.cod]);
+        const [rows] = await db.query(sql, [req.params.stamp]);
         if (rows.length === 0) {
             return res.status(404).
                     json({ error: 'loja não encontrada' });
@@ -114,7 +114,7 @@ app.get('/lojas/:id', async (req, res) => {
 app.get('/empregados/:id', async (req, res) => {
     try {
         const sql = 'SELECT * FROM empregados WHERE id = ?';
-        const [rows] = await db.query(sql, [req.params.cod]);
+        const [rows] = await db.query(sql, [req.params.id]);
         if (rows.length === 0) {
             return res.status(404).
                     json({ error: 'Marca não encontrada' });
@@ -153,10 +153,10 @@ app.post('/lojas/inserir', async (req, res) => {
 // Rota para inserir um novo empregado
 app.post('/empregados/inserir', async (req, res) => {
     try {
-        const { id, idloja, nome, funcao, email } = req.body;
-        const sql = 'INSERT INTO lojas (id, idloja, nome, funcao, email) VALUES (?,?,?,?,?)';
-        const [result] = await db.query(sql, [id, idloja, nome, funcao, email]);
-        res.json({ id: result.insertId, id, idloja, nome, funcao, email });
+        const { idloja, nome, funcao, email } = req.body;
+        const sql = 'INSERT INTO empregados (idloja, nome, funcao, email) VALUES (?,?,?,?)';
+        const [result] = await db.query(sql, [idloja, nome, funcao, email]);
+        res.json({ id: result.insertId, idloja, nome, funcao, email });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -177,7 +177,7 @@ app.post('/marca/eliminar/:cod', async (req, res) => {
 });
 
 // Rota para eliminar uma loja
-app.post('/lojas/eliminar/:id', async (req, res) => {
+app.post('/lojas/eliminar/:stamp', async (req, res) => {
     try {
         const sql  = 'DELETE FROM lojas WHERE stamp = ?';
         const [result] = await db.query(sql, [req.params.stamp]);
@@ -194,11 +194,41 @@ app.post('/lojas/eliminar/:id', async (req, res) => {
 app.post('/empregados/eliminar/:id', async (req, res) => {
     try {
         const sql  = 'DELETE FROM empregados WHERE id = ?';
-        const [result] = await db.query(sql, [req.params.stamp]);
+        const [result] = await db.query(sql, [req.params.id]);
         if (result.affectedRows === 0) {
             return res.status(404).json({ error: 'empregado não encontrada' });
         }
         res.json({ message: 'empregado eliminada com sucesso' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Rota para editar uma loja
+app.put('/lojas_editar/:stamp', async (req, res) => {
+    try {
+        const { nome, local, telefone, email, website } = req.body;
+        const sql = 'UPDATE lojas SET nome = ?, local = ?, telefone = ?, email = ?, website = ? WHERE stamp = ?';
+        const [result] = await db.query(sql, [nome, local, telefone, email, website, req.params.stamp]);
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: 'loja não encontrada' });
+        }
+        res.json({ stamp: req.params.stamp, nome, local, telefone, email, website });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Rota para editar um empregado
+app.put('/empregados_editar/:id', async (req, res) => {
+    try {
+        const { idloja, nome, funcao, email } = req.body;
+        const sql = 'UPDATE empregados SET idloja = ?, nome = ?, funcao = ?, email = ? WHERE id = ?';
+        const [result] = await db.query(sql, [idloja, nome, funcao, email, req.params.id]);
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: 'empregado não encontrada' });
+        }
+        res.json({ id: req.params.id, idloja, nome, funcao, email });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
