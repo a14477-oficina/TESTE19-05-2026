@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: db
--- Tempo de geração: 19-Maio-2026 às 11:52
+-- Tempo de geração: 26-Maio-2026 às 11:23
 -- Versão do servidor: 8.4.9
 -- versão do PHP: 8.3.26
 
@@ -215,7 +215,8 @@ CREATE TABLE `empregados` (
 --
 
 INSERT INTO `empregados` (`id`, `idloja`, `nome`, `funcao`, `email`) VALUES
-(1, 1, 'Afonso', 'lavar loiça', 'afonso@gmail.com');
+(3, 1, 'ola', 'adeus', 'ola@gmail.com'),
+(4, 1, 'leozinho', 'serleo', 'leozinho@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -322,7 +323,8 @@ CREATE TABLE `lojas` (
 --
 
 INSERT INTO `lojas` (`stamp`, `nome`, `local`, `telefone`, `email`, `website`) VALUES
-(1, 'adidas', 'rua carmino', 123456789, 'adidas@gmail.com', 'adidas.com');
+(2, 'Leo', 'lisboa', 123456789, 'leo@gmail.com', 'leozaomauzao'),
+(4, 'Afonso', 'Porto', 123456789, 'afonso@gmail.com', 'afonso.pt');
 
 -- --------------------------------------------------------
 
@@ -532,7 +534,7 @@ ALTER TABLE `cliente`
 -- AUTO_INCREMENT de tabela `empregados`
 --
 ALTER TABLE `empregados`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de tabela `inspecao`
@@ -550,7 +552,7 @@ ALTER TABLE `inspetor`
 -- AUTO_INCREMENT de tabela `lojas`
 --
 ALTER TABLE `lojas`
-  MODIFY `stamp` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `stamp` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de tabela `marca`
